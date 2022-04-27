@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>password Manager</title>
+</head>
+<body onload="init()">  
+    <h1>login i Haslo</h1>
+
+    <h2>Dodaj nowy login i haslo</h2>
+    <input type="text" name="" id="haslo">
+    <input type="text" name="" id="login">
+    <div id="hasloList"></div>
+    <button onclick="addHaslo()">Dodaj</button>
+    <script>
+        var password = prompt("Wprowadz haslo");
+
+        if (password=="ice")
+        alert('Prawidlowe haslo');
+        else {
+            alert('Niepoprawne haslo');
+            window.location.reload();
+        }
+        function init() {
+            showHasloList();
+            window.setTimeout(function(){
+                window.location.reload();
+            }, 300000);}
+
+        function addHaslo() {
+            let haslo = document.getElementById('haslo').value;
+            let login = document.getElementById('login').value;
+            let pass = login + " || "+haslo;
+            let hasloList = JSON.parse(window.localStorage.getItem('hasloList'));
+
+            if (hasloList === null) hasloList = Array();
+            hasloList.push(pass);
+            window.localStorage.setItem('hasloList', JSON.stringify(hasloList));
+            document.getElementById('haslo').value = "";
+            document.getElementById('login').value = "";
+            showHasloList();
+        }
+        function showHasloList() {
+            let hasloArray = JSON.parse(window.localStorage.getItem('hasloList'));
+            if(hasloArray === null) return;
+            let hasloList = document.getElementById('hasloList');
+            let htmlBuffer = "";
+            htmlBuffer += "<ul>";
+                for (let i = 0; i < hasloArray.length; i++) {
+                    htmlBuffer += "<li><button onclick=\"removeHaslo("+i+")\">Usun</button>" + hasloArray[i] + "</li>";
+                }
+                htmlBuffer += "</ul>";
+                hasloList.innerHTML = htmlBuffer;
+        }
+        function removeHaslo(i) {
+            let hasloArray = JSON.parse(window.localStorage.getItem('hasloList'));
+            hasloArray.splice(i, 1);
+            window.localStorage.setItem('hasloList', JSON.stringify(hasloArray));
+            showHasloList();
+        }
+    
+    </script>
+
+</body>
+</html>
